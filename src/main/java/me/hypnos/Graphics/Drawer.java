@@ -4,20 +4,21 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import me.hypnos.Controls.GameMechanics;
+import me.hypnos.Core.GameMechanics;
 
 import java.awt.*;
 import java.util.List;
 
 public class Drawer {
 
-    public static Image apple = new Image("file:src/main/java/ressources/img/apple1.png");
+    public Image apple = new Image("file:src/main/java/resources/img/apple1.png");
+    public static Image timer = new Image("file:src/main/java/resources/img/chronometer.png");
     public static Image snakeTailImg;
-    public static Image snakeHeadImg = new Image("file:src/main/java/ressources/img/head_right.png");
+    public static Image snakeHeadImg = new Image("file:src/main/java/resources/img/head_right.png");
     public static Image snakeBodyImg;
 
-    public static int appleX;
-    public static int appleY;
+    public static Point appleCoord;
+    public static Point timerCoord = new Point();
 
 
     /**
@@ -58,18 +59,18 @@ public class Drawer {
 
             if (previousVect.x == nextVect.x) {
                 // Si le Delta Vect préc. et le Delta Vect suiv. sont égaux alors la position observée à le même vecteur donc la même image
-                snakeBodyImg = new Image("file:src/main/java/ressources/img/body_vertical.png");
+                snakeBodyImg = new Image("file:src/main/java/resources/img/body_vertical.png");
             } else if (previousVect.y == nextVect.y) {
-                snakeBodyImg = new Image("file:src/main/java/ressources/img/body_horizontal.png");
+                snakeBodyImg = new Image("file:src/main/java/resources/img/body_horizontal.png");
             } else {
                 if (previousVect.x == -1 && nextVect.y == -1 || previousVect.y == -1 && nextVect.x == -1) {
-                    snakeBodyImg = new Image("file:src/main/java/ressources/img/body_topleft.png");
+                    snakeBodyImg = new Image("file:src/main/java/resources/img/body_topleft.png");
                 } else if (previousVect.x == -1 && nextVect.y == 1 || previousVect.y == 1 && nextVect.x == -1) {
-                    snakeBodyImg = new Image("file:src/main/java/ressources/img/body_bottomleft.png");
+                    snakeBodyImg = new Image("file:src/main/java/resources/img/body_bottomleft.png");
                 } else if (previousVect.x == 1 && nextVect.y == -1 || previousVect.y == -1 && nextVect.x == 1) {
-                    snakeBodyImg = new Image("file:src/main/java/ressources/img/body_topright.png");
+                    snakeBodyImg = new Image("file:src/main/java/resources/img/body_topright.png");
                 } else if (previousVect.x == 1 && nextVect.y == 1 || previousVect.y == 1 && nextVect.x == 1) {
-                    snakeBodyImg = new Image("file:src/main/java/ressources/img/body_bottomright.png");
+                    snakeBodyImg = new Image("file:src/main/java/resources/img/body_bottomright.png");
                 }
             }
             gc.drawImage(snakeBodyImg, sl.get(i).getX() * GameMechanics.sqrSize, sl.get(i).getY() * GameMechanics.sqrSize, GameMechanics.sqrSize, GameMechanics.sqrSize);
@@ -81,8 +82,12 @@ public class Drawer {
         gc.drawImage(snakeTailImg, sl.get(index).getX() * GameMechanics.sqrSize, sl.get(index).getY() * GameMechanics.sqrSize, GameMechanics.sqrSize, GameMechanics.sqrSize);
     }
 
-    public void drawFood(GraphicsContext gc) {
-        gc.drawImage(apple, appleX * GameMechanics.sqrSize, appleY * GameMechanics.sqrSize, GameMechanics.sqrSize, GameMechanics.sqrSize);
+    public void drawApple(GraphicsContext gc) {
+        gc.drawImage(apple, appleCoord.x * GameMechanics.sqrSize, appleCoord.y * GameMechanics.sqrSize, GameMechanics.sqrSize, GameMechanics.sqrSize);
+    }
+
+    public void drawTimer(GraphicsContext gc){
+        gc.drawImage(timer, timerCoord.x * GameMechanics.sqrSize, timerCoord.y * GameMechanics.sqrSize, GameMechanics.sqrSize, GameMechanics.sqrSize);
     }
 
     public static void snakeHeadOrientation() {
@@ -91,19 +96,19 @@ public class Drawer {
 
         // UP
         if (GameMechanics.pointsAreEquals(direction, GameMechanics.vectUp)) {
-            snakeHeadImg = new Image("file:src/main/java/ressources/img/head_up.png");
+            snakeHeadImg = new Image("file:src/main/java/resources/img/head_up.png");
         }
         // DOWN
         if (GameMechanics.pointsAreEquals(direction, GameMechanics.vectDown)) {
-            snakeHeadImg = new Image("file:src/main/java/ressources/img/head_down.png");
+            snakeHeadImg = new Image("file:src/main/java/resources/img/head_down.png");
         }
         // RIGHT
         if (GameMechanics.pointsAreEquals(direction, GameMechanics.vectRight)) {
-            snakeHeadImg = new Image("file:src/main/java/ressources/img/head_right.png");
+            snakeHeadImg = new Image("file:src/main/java/resources/img/head_right.png");
         }
         // LEFT
         if (GameMechanics.pointsAreEquals(direction, GameMechanics.vectLeft)) {
-            snakeHeadImg = new Image("file:src/main/java/ressources/img/head_left.png");
+            snakeHeadImg = new Image("file:src/main/java/resources/img/head_left.png");
         }
     }
 
@@ -113,26 +118,32 @@ public class Drawer {
 
         // UP
         if (GameMechanics.pointsAreEquals(direction, GameMechanics.vectUp)) {
-            snakeTailImg = new Image("file:src/main/java/ressources/img/tail_down.png");
+            snakeTailImg = new Image("file:src/main/java/resources/img/tail_down.png");
         }
         // DOWN
         if (GameMechanics.pointsAreEquals(direction, GameMechanics.vectDown)) {
-            snakeTailImg = new Image("file:src/main/java/ressources/img/tail_up.png");
+            snakeTailImg = new Image("file:src/main/java/resources/img/tail_up.png");
         }
         // RIGHT
         if (GameMechanics.pointsAreEquals(direction, GameMechanics.vectRight)) {
-            snakeTailImg = new Image("file:src/main/java/ressources/img/tail_left.png");
+            snakeTailImg = new Image("file:src/main/java/resources/img/tail_left.png");
         }
         // LEFT
         if (GameMechanics.pointsAreEquals(direction, GameMechanics.vectLeft)) {
-            snakeTailImg = new Image("file:src/main/java/ressources/img/tail_right.png");
+            snakeTailImg = new Image("file:src/main/java/resources/img/tail_right.png");
         }
     }
 
     public void drawScore(GraphicsContext gc) {
         gc.setFill(Color.rgb(255, 255, 255));
-        gc.setFont(new Font("Digital-7", 35));
+        gc.setFont(new Font("Digital-7", 20));
         gc.fillText("Score: " + GameMechanics.score, 10, 35);
+    }
+
+    public void drawTimer(GraphicsContext gc, long time){
+        gc.setFill(Color.rgb(255, 255, 255));
+        gc.setFont(new Font("Digital-7", 20));
+        gc.fillText("Temps: " + time + "s", 100, 35);
     }
 
 }

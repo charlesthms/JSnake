@@ -8,18 +8,24 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import me.hypnos.Controls.GameMechanics;
-import me.hypnos.Controls.KeyEvent;
-import me.hypnos.Model.ButtonStyle;
+import me.hypnos.Core.GameMechanics;
+import me.hypnos.Core.KeyEvent;
+import me.hypnos.Model.LargeButton;
+import me.hypnos.Model.SmallButton;
+import me.hypnos.Model.SubScene;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ViewManager extends Button {
 
-    GameMechanics gameMechanics;
+    private GameMechanics gameMechanics;
+    private GraphicsContext gc;
 
     private AnchorPane mainPane;
     private Scene mainScene;
@@ -29,29 +35,41 @@ public class ViewManager extends Button {
     private final static int MENU_BUTTON_START_X = 305;
     private final static int MENU_BUTTON_START_Y = 280;
 
-    List<ButtonStyle> menuButtons;
-    GraphicsContext gc;
+    private SubScene modeSubScene;
+
+    private List<LargeButton> menuButtons;
+    private List<SmallButton> modeButtons;
+
 
     public ViewManager() {
 
         menuButtons = new ArrayList<>();
+        modeButtons = new ArrayList<>();
 
         mainPane = new AnchorPane();
         mainScene = new Scene(mainPane, GameMechanics.WIDTH, GameMechanics.HEIGHT);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
+        mainStage.setResizable(false);
+        mainStage.setTitle("Snake - By Hypnos");
+        mainStage.getIcons().add(new Image("file:src/main/java/resources/img/icon.png"));
 
         createBackground();
         createButtons();
         createTitle();
+
+        createSubScene();
+    }
+
+    private void createSubScene(){
+        createModeSubScene();
     }
 
     public Stage getMainStage() {
         return mainStage;
     }
 
-    private void addMenuButtons(ButtonStyle btn) {
-
+    private void addMenuButtons(LargeButton btn) {
         btn.setLayoutX(MENU_BUTTON_START_X);
         btn.setLayoutY(MENU_BUTTON_START_Y + menuButtons.size() * 100);
 
@@ -59,15 +77,73 @@ public class ViewManager extends Button {
         mainPane.getChildren().add(btn);
     }
 
+    private void createModeSubScene(){
+        modeSubScene = new SubScene();
+
+        createThemesButtons();
+
+        // Ajout du bouton de retour
+        createReturnButton();
+        createModeButton();
+
+        addAllButtons();
+
+        // Ajout de la sous-scène à la scène principale
+        mainPane.getChildren().add(modeSubScene);
+    }
+
+    private void addAllButtons(){
+        for (SmallButton btn : modeButtons){
+            modeSubScene.addSmallButton(btn);
+        }
+    }
+
+    private void createThemesButtons(){
+        SmallButton colorMode = new SmallButton("SOMBRE", "THEME");
+        SmallButton bordsMode = new SmallButton("AVEC\nBORD", "BORDS");
+
+        colorMode.setLayoutX(280);
+        colorMode.setLayoutY(169);
+
+        bordsMode.setLayoutX(425);
+        bordsMode.setLayoutY(169);
+
+        modeButtons.add(colorMode);
+        modeButtons.add(bordsMode);
+    }
+
+    private void createReturnButton(){
+        LargeButton largeButton = new LargeButton("RETOUR", 23);
+
+        largeButton.setLayoutX(305);
+        largeButton.setLayoutY(600);
+
+        modeSubScene.addLargeButton(largeButton);
+
+        largeButton.setOnAction(e -> {
+            modeSubScene.moveSubScene();
+        });
+    }
+
+    private void createModeButton(){
+
+        LargeButton lb = new LargeButton("AVEC CHRONO", 18);
+
+        lb.setLayoutX(305);
+        lb.setLayoutY(300);
+
+        modeSubScene.addLargeButton(lb);
+    }
+
     private void createButtons() {
         createPlayButton();
-        createModeButton();
+        createOptionsButton();
         createCreditsButton();
         createExitButton();
     }
 
     private void createPlayButton() {
-        ButtonStyle b = new ButtonStyle("JOUER");
+        LargeButton b = new LargeButton("JOUER", 23);
 
         // Listener pour lancer le jeu sur un click
         b.setOnMousePressed(e -> {
@@ -79,19 +155,22 @@ public class ViewManager extends Button {
         addMenuButtons(b);
     }
 
-    private void createModeButton() {
-        ButtonStyle b = new ButtonStyle("MODE");
-
+    private void createOptionsButton() {
+        LargeButton b = new LargeButton("OPTIONS", 23);
         addMenuButtons(b);
+
+        b.setOnAction(e -> {
+            modeSubScene.moveSubScene();
+        });
     }
 
     private void createCreditsButton() {
-        ButtonStyle b = new ButtonStyle("CREDITS");
+        LargeButton b = new LargeButton("CREDITS", 23);
         addMenuButtons(b);
     }
 
     private void createExitButton() {
-        ButtonStyle b = new ButtonStyle("QUITTER");
+        LargeButton b = new LargeButton("QUITTER", 23);
 
         b.setOnMouseClicked(e -> mainStage.close());
 
@@ -103,13 +182,13 @@ public class ViewManager extends Button {
      * <b>Importe et dessine</b> l'arrière-plan du menu principal.
      */
     public void createBackground() {
-        Image bg = new Image("file:src/main/java/ressources/img/bg.png", 800, 800, false, true);
+        Image bg = new Image("file:src/main/java/resources/img/bg.png", 800, 800, false, true);
         BackgroundImage bgImage = new BackgroundImage(bg, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         mainPane.setBackground(new Background(bgImage));
     }
 
     private void createTitle() {
-        ImageView title = new ImageView("file:src/main/java/ressources/img/title.png");
+        ImageView title = new ImageView("file:src/main/java/resources/img/title.png");
         title.setLayoutX(280);
         title.setLayoutY(120);
 
@@ -119,8 +198,8 @@ public class ViewManager extends Button {
 
     private Stage initGameWindow(Stage stage) {
         // Paramétrage de la fenêtre
-        stage.setTitle("JSnake");
-        stage.getIcons().add(new Image("file:src/main/java/ressources/img/logo.png"));
+        stage.setTitle("Snake - By Hypnos");
+        stage.getIcons().add(new Image("file:src/main/java/resources/img/icon.png"));
         stage.setResizable(false);
 
         Group root = new Group();
