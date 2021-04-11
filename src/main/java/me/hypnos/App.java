@@ -7,7 +7,6 @@ import me.hypnos.view.ViewManager;
 
 public class App extends Application {
 
-
     public static void main(String[] args) {
         Application.launch(args);
     }
@@ -22,4 +21,5 @@ public class App extends Application {
         stage = manager.getMainStage();
         stage.show();
     }
+
 }

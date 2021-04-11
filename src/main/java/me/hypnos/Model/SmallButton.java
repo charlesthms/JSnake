@@ -7,21 +7,15 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import me.hypnos.Core.GameMechanics;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class SmallButton extends Button {
 
-
-    private final String path = new File("src/main/java/resources/sounds/ui-click.mp3").getAbsolutePath();
-    private final Media UIClickSound = new Media(new File(path).toURI().toString());
+    private final Media UIClickSound = new Media(getClass().getResource("/sounds/ui-click.mp3").toExternalForm());
     private final MediaPlayer mediaPlayer = new MediaPlayer(UIClickSound);
 
-    private final String FONT_PATH = "src/main/java/resources/fonts/Retro_Gaming.ttf";
-    private final String DARK_STYLE = "-fx-background-color: rgba(0,0,0,0); -fx-background-image: url('file:src/main/java/resources/img/small-btn-dark.png');";
-    private final String LIGHT_STYLE = "-fx-background-color: rgba(0,0,0,0); -fx-background-image: url('file:src/main/java/resources/img/small-btn-light.png');";
-    private final String RED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('file:src/main/java/resources/img/small-btn-red.png');";
+    private final String DARK_STYLE = "-fx-background-color: rgba(0,0,0,0); -fx-background-image: url('"+getClass().getResource("/img/small-btn-dark.png").toExternalForm()+"');";
+    private final String LIGHT_STYLE = "-fx-background-color: rgba(0,0,0,0); -fx-background-image: url('"+getClass().getResource("/img/small-btn-light.png").toExternalForm()+"');";
+    private final String RED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('"+getClass().getResource("/img/small-btn-red.png").toExternalForm()+"');";
 
 
     public SmallButton(String text, String defaultStyle) {
@@ -42,11 +36,7 @@ public class SmallButton extends Button {
     }
 
     private void setButtonFont() {
-        try {
-            setFont(Font.loadFont(new FileInputStream(FONT_PATH), 15));
-        } catch (FileNotFoundException e) {
-            setFont(Font.font("Verdana", 23));
-        }
+        setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/Retro_Gaming.ttf"), 15));
     }
 
     private void setLightStyle() {

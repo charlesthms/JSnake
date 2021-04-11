@@ -7,22 +7,16 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import me.hypnos.Core.GameMechanics;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class LargeButton extends Button {
 
-    private final String path = new File("src/main/java/resources/sounds/ui-click.mp3").getAbsolutePath();
-    private final Media UIClickSound = new Media(new File(path).toURI().toString());
+    private final Media UIClickSound = new Media(getClass().getResource("/sounds/ui-click.mp3").toExternalForm());
     private final MediaPlayer mediaPlayer = new MediaPlayer(UIClickSound);
 
-    private final String FONT_PATH = "src/main/java/resources/fonts/Retro_Gaming.ttf";
-    private final String BUTTON_STYLE = "-fx-background-color: transparent; -fx-background-image: url('file:src/main/java/resources/img/lg-yell.png');";
-    private final String BLUE_STYLE = "-fx-background-color: transparent; -fx-background-image: url('file:src/main/java/resources/img/lg-blue.png');";
+    private final String BUTTON_STYLE = "-fx-background-color: transparent; -fx-background-image: url('"+getClass().getResource("/img/lg-yell.png").toExternalForm()+"');";
+    private final String BLUE_STYLE = "-fx-background-color: transparent; -fx-background-image: url('"+getClass().getResource("/img/lg-blue.png").toExternalForm()+"');";
 
     public LargeButton(String text, int size) {
-
         setText(text);
         setButtonFont(size);
         setPrefWidth(190);
@@ -33,11 +27,7 @@ public class LargeButton extends Button {
     }
 
     private void setButtonFont(int size) {
-        try {
-            setFont(Font.loadFont(new FileInputStream(FONT_PATH), size));
-        } catch (FileNotFoundException e) {
-            setFont(Font.font("Verdana", 23));
-        }
+        setFont(Font.loadFont(getClass().getResourceAsStream("/fonts/Retro_Gaming.ttf"), size));
     }
 
     private void setButtonStyle() {
@@ -69,8 +59,7 @@ public class LargeButton extends Button {
                         GameMechanics.timedMode = true;
                     }
                 } else if (getText().equals("CREDITS")){
-                    String path = new File("src/main/java/resources/sounds/credits.wav").getAbsolutePath();
-                    Media credits = new Media(new File(path).toURI().toString());
+                    Media credits = new Media(getClass().getResource("/sounds/credits.wav").toExternalForm());
                     MediaPlayer cr = new MediaPlayer(credits);
                     setButtonStyle();
                     cr.play();

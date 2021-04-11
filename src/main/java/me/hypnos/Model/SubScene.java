@@ -9,7 +9,7 @@ public class SubScene extends javafx.scene.SubScene {
 
     AnchorPane subPanel;
 
-    private final String bg = "file:src/main/java/resources/img/bg-panel.png";
+    private final String bg = getClass().getResource("/img/bg-panel.png").toExternalForm();
 
     private boolean isVisible;
 

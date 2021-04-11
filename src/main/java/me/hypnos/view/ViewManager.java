@@ -8,8 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import me.hypnos.Core.GameMechanics;
 import me.hypnos.Core.KeyEvent;
@@ -17,7 +15,6 @@ import me.hypnos.Model.LargeButton;
 import me.hypnos.Model.SmallButton;
 import me.hypnos.Model.SubScene;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +49,7 @@ public class ViewManager extends Button {
         mainStage.setScene(mainScene);
         mainStage.setResizable(false);
         mainStage.setTitle("Snake - By Hypnos");
-        mainStage.getIcons().add(new Image("file:src/main/java/resources/img/icon.png"));
+        mainStage.getIcons().add(new Image(getClass().getResource("/img/icon.png").toExternalForm()));
 
         createBackground();
         createButtons();
@@ -182,13 +179,13 @@ public class ViewManager extends Button {
      * <b>Importe et dessine</b> l'arrière-plan du menu principal.
      */
     public void createBackground() {
-        Image bg = new Image("file:src/main/java/resources/img/bg.png", 800, 800, false, true);
+        Image bg = new Image(getClass().getResource("/img/bg.png").toExternalForm(), 800, 800, false, true);
         BackgroundImage bgImage = new BackgroundImage(bg, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
         mainPane.setBackground(new Background(bgImage));
     }
 
     private void createTitle() {
-        ImageView title = new ImageView("file:src/main/java/resources/img/title.png");
+        ImageView title = new ImageView(getClass().getResource("/img/title.png").toExternalForm());
         title.setLayoutX(280);
         title.setLayoutY(120);
 
@@ -199,7 +196,7 @@ public class ViewManager extends Button {
     private Stage initGameWindow(Stage stage) {
         // Paramétrage de la fenêtre
         stage.setTitle("Snake - By Hypnos");
-        stage.getIcons().add(new Image("file:src/main/java/resources/img/icon.png"));
+        stage.getIcons().add(new Image(getClass().getResource("/img/icon.png").toExternalForm()));
         stage.setResizable(false);
 
         Group root = new Group();

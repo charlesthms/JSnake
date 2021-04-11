@@ -137,8 +137,7 @@ public class GameMechanics {
 
         // Si le jeu est perdant
         if (isGameOver()) {
-            String path = new File("src/main/java/resources/sounds/game_over.wav").getAbsolutePath();
-            Media gameOver = new Media(new File(path).toURI().toString());
+            Media gameOver = new Media(getClass().getResource("/sounds/game_over.wav").toExternalForm());
             MediaPlayer mediaPlayer = new MediaPlayer(gameOver);
 
             bordersOpen = false;
@@ -225,7 +224,6 @@ public class GameMechanics {
             }
             p = generateNewPoint();
         }
-
     }
 
     private void checkFoodEat() {
@@ -233,7 +231,7 @@ public class GameMechanics {
             newTimer();
             newFood();
             score++;
-            newPlayer("src/main/java/resources/sounds/apple_crunch.wav").play();
+            newPlayer(getClass().getResource("/sounds/apple_crunch.wav").toExternalForm()).play();
             snakeBody.add(substractVect(snakeBody.get(snakeBody.size() - 1), currentDirection));
         }
     }
@@ -241,14 +239,13 @@ public class GameMechanics {
     private void checkTimerEat() {
         if (pointsAreEquals(snakeHead, new Point(Drawer.timerCoord.x, Drawer.timerCoord.y))) {
             newTimer();
-            newPlayer("src/main/java/resources/sounds/timer.mp3").play();
+            newPlayer(getClass().getResource("/sounds/timer.mp3").toExternalForm()).play();
             time += 5;
         }
     }
 
     private MediaPlayer newPlayer(String resource){
-        String path = new File(resource).getAbsolutePath();
-        Media src = new Media(new File(path).toURI().toString());
+        Media src = new Media(resource);
         return new MediaPlayer(src);
     }
 
